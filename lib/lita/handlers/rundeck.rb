@@ -49,6 +49,9 @@ module Lita
           },
           job: {
             short: "j"
+          },
+          options: {
+            short: "o"
           }
         },
         help: {
@@ -192,7 +195,8 @@ module Lita
 
         # keyword arguments win over an alias (if someone happens to give both)
         unless project && job
-          project, job = aliasdb.forward(name)
+          project, job, alias_options = aliasdb.forward(name)
+          options ||= alias_options
         end
 
         unless project && job
@@ -290,7 +294,7 @@ module Lita
           return
         end
 
-        response.reply "[#{project}] - #{job}\n" + 
+        response.reply "[#{project}] - #{job}\n" +
           client.definition(project,job).pretty_print_options
       end
 
@@ -300,7 +304,7 @@ module Lita
           response.reply t("alias.none")
         else
           text = [ t('alias.list') ]
-          text.push(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]}" })
+          text.push(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]}" })
           response.reply text.join("\n")
         end
       end
@@ -310,10 +314,11 @@ module Lita
         name    = response.matches[0][0]
         project = args[:project]
         job     = args[:job]
+        options = args[:options]
 
         if name && project && job
           begin
-            aliasdb.register(name,project,job)
+            aliasdb.register(name,project,job,options)
             response.reply t("alias.registered")
           rescue ArgumentError
             response.reply t("alias.exists")
@@ -381,11 +386,11 @@ module Lita
             akeys.map { |e| e.split(/:/).last }
           end
 
-          def register(id,project,job)
+          def register(id,project,job,options)
             if registered?(id)
               raise ArgumentError, "Alias already exists"
             else
-              save(id,project,job)
+              save(id,project,job,options)
             end
           end
 
@@ -397,8 +402,8 @@ module Lita
             end
           end
 
-          def save(id,project,job)
-            redis.hmset(akey(id), "project", project, "job", job)
+          def save(id,project,job,options)
+            redis.hmset(akey(id), "project", project, "job", job, "options", options)
           end
 
           def delete(id)
@@ -406,7 +411,7 @@ module Lita
           end
 
           def forward(id)
-            redis.hmget(akey(id), "project", "job")
+            redis.hmget(akey(id), "project", "job", "options")
           end
 
           def reverse(project,job)
@@ -418,7 +423,7 @@ module Lita
             ids.each do |id|
               hash = {}
               hash["id"] = id
-              hash["project"], hash["job"] = forward(id)
+              hash["project"], hash["job"], hash["options"] = forward(id)
               list.push(hash)
             end
             list
