@@ -196,7 +196,7 @@ module Lita
         # keyword arguments win over an alias (if someone happens to give both)
         unless project && job
           project, job, alias_options = aliasdb.forward(name)
-          options ||= alias_options
+          options ||= parse_options(alias_options) if alias_options
         end
 
         unless project && job
@@ -426,7 +426,7 @@ module Lita
               hash["project"], hash["job"], hash["options"] = forward(id)
               list.push(hash)
             end
-            list.sort
+            list.sort_by{ |obj| obj["id"] }
           end
 
           def registered?(id)
