@@ -460,7 +460,7 @@ EOF
       send_command("rundeck aliases")
       expect(replies.last).to eq <<-EOF.chomp
 Alias = [Project] - Job
- aliasfoo = [Litatest] - dateoutput - foo=bar
+ aliasfoo = [Litatest] - dateoutput - foo=bar - 
 EOF
     end
 
