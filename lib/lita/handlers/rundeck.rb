@@ -426,7 +426,7 @@ module Lita
               hash["project"], hash["job"], hash["options"] = forward(id)
               list.push(hash)
             end
-            list
+            list.sort
           end
 
           def registered?(id)
