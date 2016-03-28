@@ -196,7 +196,7 @@ module Lita
         user    = response.user.name || response.user.id || robot.name
         options = parse_options(args[:options]) if args[:options]
         report = args[:report]
-        
+
         # keyword arguments win over an alias (if someone happens to give both)
         unless project && job
           project, job, alias_options, alias_report = aliasdb.forward(name)
@@ -309,7 +309,8 @@ module Lita
           response.reply t("alias.none")
         else
           text = [ t('alias.list') ]
-          text.push(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]} - #{a["report"]}" })
+          chat.postMessage(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]} - #{a["report"]}" })
+          #text.push(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]} - #{a["report"]}" })
           response.reply text.join("\n")
         end
       end
@@ -620,7 +621,7 @@ module Lita
             max = max.to_i + 2
             response = client.get("/api/5/execution/#{id}/output?lastlines=#{max}")
             if response["output"]
-              Output.new(response["output"]) 
+              Output.new(response["output"])
             elsif response["error"][0]
               Output.new(
                 "id" => id,
