@@ -309,8 +309,7 @@ module Lita
           response.reply t("alias.none")
         else
           text = [ t('alias.list') ]
-          chat.postMessage(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]} - #{a["report"]}" })
-          #text.push(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]} - #{a["report"]}" })
+          text.push(all.map{ |a| " #{a["id"]} = [#{a["project"]}] - #{a["job"]} - #{a["options"]} - #{a["report"]}" })
           response.reply text.join("\n")
         end
       end
@@ -652,9 +651,11 @@ module Lita
           end
 
           def pretty_print_output
-            text = ["Execution #{id} output:"]
+            #text = ["Execution #{id} output:"]
+            text = []
             entries.each do |entry|
-              text.push("  #{entry["time"]} #{entry["content"]}")
+              #text.push("  #{entry["time"]} #{entry["content"]}")
+              text.push("#{entry["content"]}")
             end
 
             if @completed
