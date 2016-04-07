@@ -194,13 +194,13 @@ module Lita
         project = args[:project]
         job     = args[:job]
         user    = response.user.name || response.user.id || robot.name
-        options = parse_options(args[:options]) if args[:options]
+        options = args[:options] ? parse_options(args[:options]) : {}
         report = args[:report]
         
         # keyword arguments win over an alias (if someone happens to give both)
         unless project && job
           project, job, alias_options, alias_report = aliasdb.forward(name)
-          options ||= parse_options(alias_options) if alias_options
+          options = parse_options(alias_options).merge(options) if alias_options
           report ||= alias_report unless alias_report == ""
         end
 
