@@ -272,6 +272,15 @@ EOF
     end
   end
   
+  describe "#parse_options and get_real_options" do
+    it "should return the real option string." do
+      expect(Lita::Handlers::Rundeck.new(nil).parse_options(
+        Lita::Handlers::Rundeck.new(nil).get_real_options(
+          'rundeck run aliasfoo --options SECONDS=60|string="some text"|k="lots of text"|quotes="o\'yeah\'"')))
+        .to eql({"SECONDS" => "60", "string"=> "some text", "k"=> "lots of text", "quotes"=> "o\'yeah\'"})
+    end
+  end
+  
   describe "#run" do
     it "submit job and be denied because of authorization" do
       allow(Lita::Authorization).to receive(:user_in_group?).and_return(false)
