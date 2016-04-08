@@ -450,8 +450,8 @@ module Lita
         class Client
           attr_accessor :url, :token
 
-          MAX_EXECUTIONS = 10
-          MAX_OUTPUT     = 10
+          MAX_EXECUTIONS = 100
+          MAX_OUTPUT     = 1000
 
           def self.ensure_array(ref)
             return [ref] if ref.is_a?(Hash)
