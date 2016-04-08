@@ -254,6 +254,24 @@ EOF
     end
   end
 
+  describe "#parse_options" do
+    it "should parse values with quotes and spaces" do
+      expect(Lita::Handlers::Rundeck.new(nil).parse_options('stuff=lots of stuff|test=boom diggity')).to eql({"stuff" => "lots of stuff", "test" => "boom diggity"})
+    end
+  end
+  
+  describe "#get_real_options" do
+    it "should return the real option string." do
+      expect(Lita::Handlers::Rundeck.new(nil).get_real_options('rundeck run aliasfoo --options SECONDS=60|string=some text')).to eql("SECONDS=60|string=some")
+    end
+  end
+
+  describe "#get_real_options" do
+    it "should return the real option string." do
+      expect(Lita::Handlers::Rundeck.new(nil).get_real_options('rundeck run aliasfoo --options SECONDS=60|string="some text"|k="lots of text"|quotes="o\'yeah\'"')).to eql('SECONDS=60|string="some text"|k="lots of text"|quotes="o\'yeah\'"')
+    end
+  end
+  
   describe "#run" do
     it "submit job and be denied because of authorization" do
       allow(Lita::Authorization).to receive(:user_in_group?).and_return(false)
@@ -269,7 +287,7 @@ EOF
       grab_request("get", 200, rundeck_jobs)
       grab_request("get", 200, rundeck_run)
       send_command("rundeck alias register aliasfoo --project Litatest --job dateoutput")
-      send_command("rundeck run aliasfoo --options SECONDS=60")
+      send_command("rundeck run aliasfoo --options SECONDS=60|string=some text")
       expect(replies.last).to eq <<-EOF.chomp
 Execution 285 is running. Average job duration is 1.717 seconds.
 EOF

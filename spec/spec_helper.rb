@@ -8,3 +8,4 @@ SimpleCov.start { add_filter "/spec/" }
 
 require "lita-rundeck"
 require "lita/rspec"
+require 'byebug'
