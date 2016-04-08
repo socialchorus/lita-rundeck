@@ -310,7 +310,7 @@ module Lita
         pairs.each do |p|
           if p =~ /\=/
             k,v = p.split(/\=/)
-            options[k] = v
+            options[k] = v.gsub!(/\A"|"\Z/, '') #remove starting and ending quotes.
           end
         end
         options
