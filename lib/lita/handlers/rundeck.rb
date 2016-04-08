@@ -203,7 +203,7 @@ module Lita
           options = parse_options(alias_options).merge(options) if alias_options
           report ||= alias_report unless alias_report == ""
         end
-
+        
         unless project && job
           response.reply t("misc.job_not_found")
           return
@@ -728,7 +728,7 @@ module Lita
             if options
               arg_string = []
               options.each do |k,v|
-                arg_string.push("-#{k} #{v}")
+                arg_string.push("-#{k} \"#{v}\"")
               end
               args[:argString] = arg_string.join(" ")
             end

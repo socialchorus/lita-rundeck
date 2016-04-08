@@ -296,7 +296,7 @@ EOF
       grab_request("get", 200, rundeck_jobs)
       grab_request("get", 200, rundeck_run)
       send_command("rundeck alias register aliasfoo --project Litatest --job dateoutput")
-      send_command("rundeck run aliasfoo --options SECONDS=60|string=some text")
+      send_command("rundeck run aliasfoo --options SECONDS=60|string=\"some text\"")
       expect(replies.last).to eq <<-EOF.chomp
 Execution 285 is running. Average job duration is 1.717 seconds.
 EOF
