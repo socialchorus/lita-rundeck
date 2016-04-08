@@ -731,8 +731,12 @@ module Lita
               args[:argString] = arg_string.join(" ")
             end
 
+            puts args.inspect
+            
             api_response = client.get("/api/5/job/#{id}/run", args)
-
+            
+            puts api_response.inspect
+            
             if api_response["success"]
               Execution.new(api_response["executions"]["execution"])
             elsif api_response["error"][0]
