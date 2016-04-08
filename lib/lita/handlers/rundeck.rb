@@ -726,7 +726,7 @@ module Lita
             if options
               arg_string = []
               options.each do |k,v|
-                arg_string.push("-#{k} \"\"#{v}\"\"") #super hacky because rundeck doesn't handle spaces and quotes well.
+                arg_string.push("-#{k} \"#{v}\"")
               end
               args[:argString] = arg_string.join(" ")
             end
