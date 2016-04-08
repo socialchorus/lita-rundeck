@@ -196,7 +196,7 @@ module Lita
         user    = response.user.name || response.user.id || robot.name
         options = args[:options] ? parse_options(args[:options]) : {}
         report = args[:report]
-        
+
         # keyword arguments win over an alias (if someone happens to give both)
         unless project && job
           project, job, alias_options, alias_report = aliasdb.forward(name)
@@ -620,7 +620,7 @@ module Lita
             max = max.to_i + 2
             response = client.get("/api/5/execution/#{id}/output?lastlines=#{max}")
             if response["output"]
-              Output.new(response["output"]) 
+              Output.new(response["output"])
             elsif response["error"][0]
               Output.new(
                 "id" => id,
@@ -651,9 +651,11 @@ module Lita
           end
 
           def pretty_print_output
-            text = ["Execution #{id} output:"]
+            #text = ["Execution #{id} output:"]
+            text = []
             entries.each do |entry|
-              text.push("  #{entry["time"]} #{entry["content"]}")
+              #text.push("  #{entry["time"]} #{entry["content"]}")
+              text.push("#{entry["content"]}")
             end
 
             if @completed
