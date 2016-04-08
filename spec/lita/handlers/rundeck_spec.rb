@@ -256,7 +256,7 @@ EOF
 
   describe "#parse_options" do
     it "should parse values with quotes and spaces" do
-      expect(Lita::Handlers::Rundeck.new(nil).parse_options('stuff=lots of stuff|test=boom diggity')).to eql({"stuff" => "lots of stuff", "test" => "boom diggity"})
+      expect(Lita::Handlers::Rundeck.new(nil).parse_options('stuff="lots of stuff"|test="boom diggity"')).to eql({"stuff" => "lots of stuff", "test" => "boom diggity"})
     end
   end
   
