@@ -194,7 +194,7 @@ module Lita
         project = args[:project]
         job     = args[:job]
         user    = response.user.name || response.user.id || robot.name
-        options = args[:options] ? parse_options(args[:options]) : {}
+        options = args[:options] ? parse_options(get_real_options(response.message.body.inspect)) : {}
         report = args[:report]
 
         # keyword arguments win over an alias (if someone happens to give both)
@@ -215,6 +215,40 @@ module Lita
         if execution.status == 'running' && report
           report_back(response, execution, report)
         end
+      end
+      
+      # because slop doesn't care for spaces or quotes.
+      def get_real_options(command)
+        ["--options", "-o"].each {|option|
+          if command.include? option
+            options_and_other_stuff = command.split(option).last.strip
+            end_of_options = options_and_other_stuff.length
+            quote_stash = []
+            ignore_stash = []
+            options_and_other_stuff.split("").each_with_index {|str,index|
+              if ignore_stash.pop() != nil
+                next
+              end
+              case str
+              when "\\"
+                ignore_stash.push(str)
+              when "\"", "'"
+                if ignore_stash.length == 0
+                  quote_stash.push(str)
+                elsif str != quote_stash.pop()
+                  raise ArgumentError, "mismatched quotes near #{index}: #{options_and_other_stuff[index]}"
+                end
+              when " "
+                if quote_stash.length == 0
+                  end_of_options = index
+                  break
+                end
+              end
+            }
+            return options_and_other_stuff[0, end_of_options]
+          end
+        }
+        return nil
       end
 
       def report_back(response, execution, output_limit)
