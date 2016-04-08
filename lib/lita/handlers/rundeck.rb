@@ -194,7 +194,7 @@ module Lita
         project = args[:project]
         job     = args[:job]
         user    = response.user.name || response.user.id || robot.name
-        options = args[:options] ? parse_options(get_real_options(response.message.body.inspect)) : {}
+        options = args[:options] ? parse_options(get_real_options(response.message.body)) : {}
         report = args[:report]
         
         # keyword arguments win over an alias (if someone happens to give both)
