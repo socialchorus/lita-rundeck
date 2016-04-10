@@ -309,15 +309,20 @@ module Lita
         pairs = string.split(/\|/)
         pairs.each do |p|
           if p =~ /\=/
-            k,v = p.split(/\=/)
-            if v.start_with?('"') && v.end_with?('"')
-              options[k] = v.chomp('"').reverse.chomp('"').reverse
-            else
-              options[k] = v
-            end
+            k,v = p.split(/\=/, 2)
+            options[k] = clean_quotes(v)
           end
         end
         options
+      end
+      
+      def clean_quotes(value)
+        is_first_char_quote = value[0] =~ /[“”"]/
+        is_last_char_quote = value[-1, 1] =~ /[“”"]/
+        if is_first_char_quote && is_last_char_quote && value.length > 2
+          return value[1..value.length-2]
+        end
+        return value
       end
 
       def options(response)
@@ -730,12 +735,8 @@ module Lita
               end
               args[:argString] = arg_string.join(" ")
             end
-
-            puts args.inspect
             
             api_response = client.get("/api/5/job/#{id}/run", args)
-            
-            puts api_response.inspect
             
             if api_response["success"]
               Execution.new(api_response["executions"]["execution"])

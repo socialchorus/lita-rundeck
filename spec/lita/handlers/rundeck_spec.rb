@@ -260,6 +260,18 @@ EOF
     end
   end
   
+  describe "#parse_options" do
+    it 'should parse values with = surrounded by quotes' do
+      expect(Lita::Handlers::Rundeck.new(nil).parse_options('Value="[Jv4wg==]"')).to eql({"Value"=>"[Jv4wg==]"})
+    end
+  end
+  
+  describe "#clean_quotes" do
+    it 'should parse values with = non standard quotes' do
+      expect(Lita::Handlers::Rundeck.new(nil).clean_quotes('“[Jv4wg==]”')).to eql("[Jv4wg==]")
+    end
+  end
+  
   describe "#get_real_options" do
     it "should return the real option string." do
       expect(Lita::Handlers::Rundeck.new(nil).get_real_options('rundeck run aliasfoo --options SECONDS=60|string=some text')).to eql("SECONDS=60|string=some")
