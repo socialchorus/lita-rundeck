@@ -513,7 +513,7 @@ module Lita
             uri = "#{@url}#{path}"
             # Replace double slashes with a single one, excluding the // after the :
             uri.gsub!(/([^:])\/\//, '\1/')
-
+            headers = {'X-Rundeck-Auth-Token' => @token }
             request_failed = false
 
             http_response = @http.get(
@@ -521,8 +521,6 @@ module Lita
               options,
               headers
             )
-
-            http_response.headers['X-Rundeck-Auth-Token'] = @token
 
             hash = {}
             if http_response.body =~ /<.*?>/m
@@ -535,7 +533,8 @@ module Lita
                 {
                   "ForceArray" => false,
                   "GroupTags"  => {
-                    "options"    => "option"
+                    "options"    => "option",
+                    "headers"    => "header"
                   }
                 }
               )
@@ -546,7 +545,7 @@ module Lita
 
             if @debug || request_failed
               output = options.map{ |k,v| "#{k.to_s}=#{v}" }.join("&")
-              @log.debug "Full HTTP Response: #{http_response.headers}"
+              @log.debug "Full HTTP Response: #{headers}"
               @log.debug "API request: GET #{uri}&#{output}"
               @log.debug "API response: (HTTP #{http_response.status}) #{http_response.body}"
               @log.debug "Hash: #{hash.inspect}"
