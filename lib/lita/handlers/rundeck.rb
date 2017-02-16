@@ -515,12 +515,12 @@ module Lita
             uri.gsub!(/([^:])\/\//, '\1/')
             request_failed = false
 
-            http_response['X-Rundeck-Auth-Token'] = @token
-
             http_response = @http.get(
               uri,
               options
             )
+
+            http_response['X-Rundeck-Auth-Token'] = @token
 
             hash = {}
             if http_response.body =~ /<.*?>/m
