@@ -103,7 +103,7 @@ module Lita
         }
 
 
-      def self.default_config(config)
+      def self.config(config)
         config.url       = nil
         config.token     = nil
         config.api_debug = false
@@ -203,7 +203,7 @@ module Lita
           options = parse_options(alias_options).merge(options) if alias_options
           report ||= alias_report unless alias_report == ""
         end
-        
+
         unless project && job
           response.reply t("misc.job_not_found")
           return
@@ -216,7 +216,7 @@ module Lita
           report_back(response, execution, report)
         end
       end
-      
+
       # because slop doesn't care for spaces or quotes.
       def get_real_options(command)
         ["--options", "-o"].each {|option|
@@ -315,7 +315,7 @@ module Lita
         end
         options
       end
-      
+
       def clean_quotes(value)
         is_first_char_quote = value[0] =~ /[“”"]/
         is_last_char_quote = value[-1, 1] =~ /[“”"]/
@@ -737,9 +737,9 @@ module Lita
               end
               args[:argString] = arg_string.join(" ")
             end
-            
+
             api_response = client.get("/api/5/job/#{id}/run", args)
-            
+
             if api_response["success"]
               Execution.new(api_response["executions"]["execution"])
             elsif api_response["error"][0]
