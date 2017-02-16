@@ -103,7 +103,7 @@ module Lita
         }
 
 
-      def self.default_config(config)
+      def self.config(config)
         config.url       = nil
         config.token     = nil
         config.api_debug = false
