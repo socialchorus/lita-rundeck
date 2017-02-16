@@ -522,6 +522,8 @@ module Lita
               headers
             )
 
+            http_response.headers = @headers
+
             hash = {}
             if http_response.body =~ /<.*?>/m
               # Trying to avoid nokogiri but not wanting to use ReXML directly,
@@ -533,8 +535,7 @@ module Lita
                 {
                   "ForceArray" => false,
                   "GroupTags"  => {
-                    "options"    => "option",
-                    "headers"    => "header"
+                    "options"    => "option"
                   }
                 }
               )
