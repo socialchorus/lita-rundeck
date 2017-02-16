@@ -103,7 +103,7 @@ module Lita
         }
 
 
-      def self.config(config)
+      def self.default_config(config)
         config.url       = nil
         config.token     = nil
         config.api_debug = false
@@ -232,7 +232,7 @@ module Lita
               case str
               when "\\"
                 ignore_stash.push(str)
-              when "\"", "'", "“", "”"
+              when "\"", "'"
                 if ignore_stash.length == 0
                   quote_stash.push(str)
                 elsif str != quote_stash.pop()
