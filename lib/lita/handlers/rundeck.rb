@@ -257,7 +257,7 @@ module Lita
 
         # wait the average duration + 1s
         average_duration = execution.job.average_duration.to_i / 1000
-        sleep average_duration + 1
+        sleep 10
 
         # check if complete and loop until complete with 10 second check / announce
         while true
@@ -494,7 +494,7 @@ module Lita
           attr_accessor :url, :token
 
           MAX_EXECUTIONS = 100
-          MAX_OUTPUT     = 1000
+          MAX_OUTPUT     = 10000
 
           def self.ensure_array(ref)
             return [ref] if ref.is_a?(Hash)
