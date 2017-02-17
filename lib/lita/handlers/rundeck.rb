@@ -513,6 +513,7 @@ module Lita
             uri = "#{@url}#{path}"
             # Replace double slashes with a single one, excluding the // after the :
             uri.gsub!(/([^:])\/\//, '\1/')
+            options[:authtoken] = @token
 
             request_failed = false
 
@@ -520,8 +521,6 @@ module Lita
               uri,
               options
             )
-
-            http_response['X-Rundeck-Auth-Token'] = @token
 
             hash = {}
             if http_response.body =~ /<.*?>/m
@@ -545,7 +544,6 @@ module Lita
 
             if @debug || request_failed
               output = options.map{ |k,v| "#{k.to_s}=#{v}" }.join("&")
-              @log.debug "API headers: #{http_response.inspect}"
               @log.debug "API request: GET #{uri}&#{output}"
               @log.debug "API response: (HTTP #{http_response.status}) #{http_response.body}"
               @log.debug "Hash: #{hash.inspect}"
