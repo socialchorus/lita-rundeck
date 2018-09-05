@@ -38,8 +38,8 @@ en:
           token_unauthorized: "API token is unauthorized or lacks runAs permission; check the apitoken.aclpolicy"
           unauthorized: "You aren't authorized to run jobs"
           failed: "Something went wrong with the job execution"
-          success: "Execution %{id} is running. Average job duration is %{average_duration} seconds."
-          still_running: "Execution %{id} has been running for %{current_duration}s (%{average_duration}s average)"
+          success: "Execution %{id} is running. Average job duration is %{average_duration} seconds. Details at %{job_url}"
+          still_running: "Execution %{id} has been running for %{current_duration}s (%{average_duration}s average). Details at %{job_url}"
           conflict: "Job is already running and only allows one execution at a time"
         alias:
           none: "No aliases have been registered yet"
